@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import 'bulma/css/bulma.css'; //поменяли таблицу стилей. Используем css framework Bulma
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
