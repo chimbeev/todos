@@ -1,5 +1,7 @@
 import {Component} from 'react';
 import TodoList from './TodoList'; //импортируем компонент из модуля src\TodoList.js
+import TodoAdd from './TodoAdd'; //импортируем компонент из модуля src\TodoAdd.js
+
 
 const date1 = new Date(2021, 7, 19, 14, 5);
 const date2 = new Date(2021, 7, 19, 15, 23);
@@ -30,7 +32,38 @@ export default class App extends Component { // ...класс компонент
         компонент не заработает.*/
         super(props); // .............................................. 5
         /*массив с делами, хранящийся в константе initialData, присваивается свойству data (поз. 6).*/
-        this.data = initialData; // ................................... 6
+        this.state = {data: initialData};
+        //в нашем обьекте состояния будет находится свойство data, хранящее ссылку на массив дел
+        this.setDone = this.setDone.bind(this); //Метод bind создает на основе переданной фнкции новую функцию ,
+    //    в которой переменная this ссылается на обьект , указанный в первом параметре метода bind
+        this.delete = this.delete.bind(this);
+        this.add = this.add.bind(this);
+    }
+
+    setDone(key) {
+        //Этот метод помечает дело как выполненное
+        const deed = this.state.data.find((current) => current.key === key);
+        //Используем метод find() класса Array для поиска в массиве дела, у которого идент совпадает с полученным в качестве параметра
+        //Если дело найдено, заносим в его свойство done значение true
+        if (deed)
+            deed.done = true;
+        this.setState((state) =>({}));
+    //    Меняем состояние, не меняя значений свойств, для чего вернем из функции переданной методу setState() пустой объект
+    }
+    delete(key) {
+    //    Этот метод удалит дело с заданным идентификатором
+        const newData = this.state.data.filter(
+            (current) => current.key !==key
+            //получаем новый массив дел, не содержащий дела с указанным идентификатором
+        );
+        this.setState((state) => ({data: newData}));
+    //    после чего меняем состояние, занеся в свойство data обновленного обьекта состояния ссылку на новый массив
+    }
+    //Этот метод добавит в массив новое дело, представленное простоым обьектом
+    add(deed) {
+        //Мыдобавляем новое дело в массив из свойства data объекта состоянияи и изменяем состояние, не меняя значений его свойств
+        this.state.data.push(deed);
+        this.setState((state) => ({}));
     }
 
     /*метод render() (поз. 7), который выводит компонент на страницу. Он должен возвращать особый объект,
@@ -59,7 +92,14 @@ export default class App extends Component { // ...класс компонент
                 <main className="content px-6 mt-6"> {/* ................... 14*/}
                     {/* Чтобы передать массив задач, хранящийся в свойстве data компонента-родителя App, компоненту-потомку TodoList,
                         мы создали проп с именем list, записав его непосредственно в теге компонента TodoList, подобно обычному свойству. */}
-                    <TodoList list={this.data} /> {/* Это тэг компонента - имя выводимого компонента-потомка. TodoList потомок App */}
+                    <TodoList list={this.state.data}
+                              setDone={this.setDone}
+                              delete={this.delete} /> {/* Это тэг компонента - имя выводимого компонента-потомка. TodoList потомок App */}
+                    {/*передали этот метод delete компоненту TodoList через проп delete*/}
+                    {/*передали ссылку на функцию из свойства setDone компоненту TodoList через проп setDone*/}
+                    {/*чтобы передать массив задач в компонент-потомок TodoList  создаем проп list . И передаем пропу  содержимое this.data*/}
+                    {/*выводим под перечнем дел еще один компонент TodoAdd*/}
+                    <TodoAdd add={this.add()} />
                     <button className="button is-large is-info">Click me</button>
 
                 </main>
