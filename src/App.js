@@ -1,3 +1,4 @@
+import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 import {Component} from 'react';
 import TodoList from './TodoList'; //импортируем компонент из модуля src\TodoList.js
 import TodoAdd from './TodoAdd'; //импортируем компонент из модуля src\TodoAdd.js
@@ -61,7 +62,7 @@ export default class App extends Component { // ...класс компонент
     }
     //Этот метод добавит в массив новое дело, представленное простоым обьектом
     add(deed) {
-        //Мыдобавляем новое дело в массив из свойства data объекта состоянияи и изменяем состояние, не меняя значений его свойств
+        //Мы добавляем новое дело в массив из свойства data объекта состояния и изменяем состояние, не меняя значений его свойств
         this.state.data.push(deed);
         this.setState((state) => ({}));
     }
@@ -70,19 +71,29 @@ export default class App extends Component { // ...класс компонент
     представляющий содержимое компонента: все имеющиеся в нем абзацы, заголовки, списки, таблицы, элементы управления и пр. (поз. 8).*/
     render() { // ................................................... 7
         return ( // ..........Далее идет JSX код......................................... 8
-            <div> {/* ................................................... 10
-                посредством особых стилевых классов привязаны стили, содержащиеся в CSS-фреймворке Bulma:
-                со стилевыми классами navbar (задает оформление полосы навигации) и is-light (светло-серый цвет фона) — сама полоса навигации,
-                пока практически «пустая»; */}
+
+            <HashRouter> {/* ....это маршрутизатор............... 14*/}
+
                 <nav className="navbar is-light"> {/* ......................
                     со стилевым классом navbar-brand — обозначение бренда, выводящееся в левой части полосы навигации и обычно представляю-
                     щее собой название приложения.*/}
                     <div className="navbar-brand"> {/* ....................... 12
                         со стилевыми классами navbar-item (собственно обозначение бренда) и is-uppercase (приведение
                         текста к верхнему регистру), в котором и выводится наш бренд — слово «Todos». */}
-                        <span className="navbar-item is-uppercase"> {/* ........ 13 */}
-                            Todos
-                        </span>
+                        <NavLink to="/" className={({isActive}) =>
+                            'navbar-item is-uppercase' + ( isActive ? ' is-active' : '')}
+                        >
+                        Todos
+                        </NavLink>
+                    </div>
+                    <div className="navbar-menu">
+                        <div className="navbar-start">
+                            <NavLink to="/add" className={({ isActive }) =>
+                                'navbar-item' + (isActive ? ' is-active' : '')}
+                            >
+                            Создать дело
+                            </NavLink>
+                        </div>
                     </div>
                 </nav>
                 {/* со стилевыми классами content (обычное оформление содержимого страницы в стиле Bulma), px-6 (большие внутренние отступы сле-
@@ -90,20 +101,22 @@ export default class App extends Component { // ...класс компонент
                 позже мы заменим его на компонент перечня дел. */}
 
                 <main className="content px-6 mt-6"> {/* ................... 14*/}
-                    {/* Чтобы передать массив задач, хранящийся в свойстве data компонента-родителя App, компоненту-потомку TodoList,
-                        мы создали проп с именем list, записав его непосредственно в теге компонента TodoList, подобно обычному свойству. */}
-                    <TodoList list={this.state.data}
-                              setDone={this.setDone}
-                              delete={this.delete} /> {/* Это тэг компонента - имя выводимого компонента-потомка. TodoList потомок App */}
-                    {/*передали этот метод delete компоненту TodoList через проп delete*/}
-                    {/*передали ссылку на функцию из свойства setDone компоненту TodoList через проп setDone*/}
-                    {/*чтобы передать массив задач в компонент-потомок TodoList  создаем проп list . И передаем пропу  содержимое this.data*/}
-                    {/*выводим под перечнем дел еще один компонент TodoAdd*/}
-                    <TodoAdd add={this.add()} />
-                    <button className="button is-large is-info">Click me</button>
+                    <Routes> {/* ....коммутатор - отдельные экраны приложения будут выводиться в теге main
+                    В коммутатор поместили список маршрутов............... 14*/}
+                        {/* ....создаем маршрут............... 14*/}
+                        <Route path="/" element={
+                            <TodoList list={this.state.data}
+                                      setDone={this.setDone}
+                                      delete={this.delete} />
+                        } />
+                        <Route path="/add" element={
+                            <TodoAdd add={this.add} />
+                        } />
+                    </Routes>
 
                 </main>
-            </div>
+            </HashRouter>
+
         ); // ......................................................... 9
     }
 }
