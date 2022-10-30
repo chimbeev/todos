@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import 'bulma/css/bulma.css'; //поменяли таблицу стилей. Используем css framework Bulma
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './firebase'; //Запускаем на выполнение модуль firebase.js
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

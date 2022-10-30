@@ -1,19 +1,28 @@
+import { Link, Navigate } from 'react-router-dom'; /*Добавляем компонент создающий гиперссылки*/
+// ...... выводим таблицу с перечнем дел и задем стили через классы*/}
+//is-hover able - подстветка строкпри наведении мыши на строку. is-fullwidth - растянуть таблицу на всю ширину родителя**/}
+//Заголовок дела следует вывести зачеркнутым если дело выполнено*/}
+//и не зачеркнутым если не выполнено.*/}
+
+
 export default function TodoList(props) { // ...................... принимаем данные через props
+    if (!props.currentUser)
+        return <Navigate to="/login" replace />;
+    else
     return (
         <section>  {/*...............................................корневой тэг */}
             <h1>Дела</h1>
-            <table className="table is-hover able is-fullwidth"> {/* ...... выводим таблицу с перечнем дел и задем стили через классы*/}
-        {/*//is-hover able - подстветка строкпри наведении мыши на строку. is-fullwidth - растянуть таблицу на всю ширину родителя**/}
-                {/*//Заголовок дела следует вывести зачеркнутым если дело выполнено*/}
-                {/*//и не зачеркнутым если не выполнено.*/}
+            <table className="table is-hover able is-fullwidth">
                 <tbody>
                  {props.list.map((item) => (
                     // .............................перебираем полученный массив с делами
                     <tr key={item.key}>
                         {/*............................выводит строку таблицы*/}
                         <td>
-                            {item.done && <del>{item.title}</del>}
-                            {!item.done && item.title}
+                            <Link to={`/${item.key}`}>
+                                {item.done && <del>{item.title}</del>}
+                                {!item.done && item.title}
+                            </Link>
                         </td>
                         <td>
                             <button
