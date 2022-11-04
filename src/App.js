@@ -10,7 +10,8 @@ import Logout from "./Logout";
 import Login from "./Login";
 import {getList} from "./auth"; //чтобы получать список дел пользователя
 import {setDone} from "./auth"; //чтобы пометить дело ак выполненное
-import {del} from "./auth"; //чтобы удалить дело
+import {del} from "./auth";
+import {act} from "@testing-library/react"; //чтобы удалить дело
 
 //const date1 = new Date(2021, 7, 19, 14, 5);
 //const date2 = new Date(2021, 7, 19, 15, 23);
@@ -105,12 +106,14 @@ export default class App extends Component { // ...класс компонент
     async authStateChanged(user) { //Этот метод будет вызываться при изменении статуса пользователя и заносить полученное значение
         //в состояние компонента. Если пользователь выполнил вход, метод получит в качестве параметра обьект пользователя,
         //а если пользователь вышел , то значение null
-        this.setState((state) => ({currentUser: user }));
+        await act(() => {
+            this.setState((state) => ({currentUser: user}));
+        });
         //Сделаем так чтобы если пользователь не выполнил вход - выводился пустой список дел
         //Если пользователь выполнил вход - выводился перечень созданных им дел.
         if (user) {
             const newData = await getList(user);
-            this.setState((state) => ({data: newData}));
+            await act(() => {this.setState((state) => ({data: newData}));});
         } else {this.setState((state) =>({ data: []}));
         }
     }

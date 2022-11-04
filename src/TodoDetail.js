@@ -15,6 +15,7 @@ export default function TodoDetail(props) {
             <p>{deed.createdAt}</p>
             {deed.desc && <p>{deed.desc}</p>}
             {deed.image && <p><img src={deed.image} alt="Иллюстрация" /></p>}
+
         </section>
     )
 }

@@ -65,7 +65,7 @@ export default class TodoAdd extends Component {
         this.props.add(addedDeed);//добавляем дело в список, хранящийся в компоненте приложения, вызвав метод add() этого компонента
         /*после создания дела меняем состояние, одновеременно занеся в его свойство redirect значение true
         * Изменение состояния вызовет его обновление*/
-        this.setState((state) => ({ redirect: true }));
+        this.setState((state) => ({ redirect: true }));//
     }
 
     render() {
